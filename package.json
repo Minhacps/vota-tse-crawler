@@ -12,6 +12,6 @@
   "devDependencies": {},
   "dependencies": {
     "firebase-admin": "^6.0.0",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.6.1"
   }
 }
