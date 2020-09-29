@@ -1,32 +1,39 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebase-key.json');
-const estadualDetails = require('../candidates-data/estadual-details.json');
-const federalDetails = require('../candidates-data/federal-details.json');
+const candidatesDetails = require('../candidates-data/2020/campinas-details.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
 const updatePicture = async () => {
-  const allCandidatesDetails = [...estadualDetails, ...federalDetails];
   const candidates = await admin
     .firestore()
     .collection('users')
     .where('role', '==', 'candidate')
+    .where('city', '==', 'porto-alegre')
     .get()
     .then(querySnapshot => querySnapshot);
 
   candidates.forEach((candidate) => {
     const candidateData = candidate.data();
 
-    const filteredData = { ...allCandidatesDetails.find(i => i.number === Number(candidateData.number))};
-    const picture = filteredData.picture || null;
+    if (candidateData.picture) {
+      return;
+    }
+
+    const filteredData = { ...candidatesDetails.find(i => i.number === Number(candidateData.candidateNumber)) };
+
+    if (!filteredData.picture) {
+      return false;
+    }
 
     admin
       .firestore()
       .collection('users')
       .doc(candidate.id)
-      .update({ picture })
+      .update({ picture: filteredData.picture })
+      .then(() => console.log(candidateData.candidateNumber))
       .catch(console.log)
   })
 }
