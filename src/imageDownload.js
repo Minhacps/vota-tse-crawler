@@ -1,7 +1,8 @@
 var fs = require('fs');
 const request = require('request')
-const data = require('../candidates-data/2020/recife-details.json');
+const city = 'porto-alegre';
 
+let counter = 0;
 const download = (url, path) => new Promise(resolve => {
   request.head(url, (err, res, body) => {
     request(url)
@@ -10,18 +11,37 @@ const download = (url, path) => new Promise(resolve => {
   })
 });
 
-const firstHalf = data.slice(0, data.length / 2);
-const secondHalf = data.slice(data.length / 2, data.length)
-
-let counter = 0;
 const downloadList = async (items) => {
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    await download(item.picture, `../candidates-data/2020/pictures/recife/${item.number}.jpg`);
+    await download(item.picture, `../candidates-data/2020/pictures/${city}/${item.number}.jpg`);
     console.log(`Done - ${item.number} - ${counter}`);
     counter++
   }
 }
 
-downloadList(firstHalf);
-downloadList(secondHalf);
+const getMissingCandidates = () => new Promise(resolve => {
+  const data = require(`../candidates-data/2020/${city}-details.json`);
+
+  fs.readdir(`../candidates-data/2020/pictures/${city}`, (err, files) => {
+    const candidateNumbers = files.map(i => String(i).replace('.jpg', ''));
+    const missingCandidates = data.filter(i => !candidateNumbers.includes(String(i.number)));
+    resolve(missingCandidates);
+  });
+});
+
+const downloadMissingCandidates = () => {
+  getMissingCandidates()
+    .then(downloadList);
+}
+
+const downloadFullList = () => {
+  const candidatesList = require(`../candidates-data/2020/${city}-details.json`).slice(230);
+  const firstHalf = candidatesList.slice(0, candidatesList.length / 2);
+  const secondHalf = candidatesList.slice(candidatesList.length / 2, candidatesList.length)
+
+  downloadList(firstHalf);
+  downloadList(secondHalf);
+}
+
+downloadMissingCandidates()
