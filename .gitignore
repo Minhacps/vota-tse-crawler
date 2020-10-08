@@ -2,3 +2,4 @@ node_modules
 firebase-key.json
 firebase-key-prod.json
 firebase-key-dev.json
+.DS_Store
