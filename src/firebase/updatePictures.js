@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebase-key.json');
-const candidatesDetails = require('../candidates-data/2020/campinas-details.json');
+const candidatesDetails = require('../../candidates-data/2020/campinas-details.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -11,7 +11,7 @@ const updatePicture = async () => {
     .firestore()
     .collection('users')
     .where('role', '==', 'candidate')
-    .where('city', '==', 'porto-alegre')
+    .where('city', '==', 'campinas')
     .get()
     .then(querySnapshot => querySnapshot);
 
