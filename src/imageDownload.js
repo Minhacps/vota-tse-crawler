@@ -1,6 +1,6 @@
 var fs = require('fs');
 const request = require('request')
-const city = 'americana';
+const city = 'porto-alegre';
 
 let counter = 0;
 const download = (url, path) => new Promise(resolve => {
@@ -26,6 +26,7 @@ const getMissingCandidates = () => new Promise(resolve => {
   fs.readdir(`../candidates-data/2020/pictures/${city}`, (err, files = []) => {
     const candidateNumbers = files.map(i => String(i).replace('.jpg', ''));
     const missingCandidates = data.filter(i => !candidateNumbers.includes(String(i.number)));
+    console.log(missingCandidates)
     resolve(missingCandidates);
   });
 });

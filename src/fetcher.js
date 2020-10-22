@@ -4,20 +4,26 @@ const fetch = require('node-fetch');
 
 const dataDir = path.resolve(__dirname, '..', 'candidates-data', '2020');
 
-const americana = {
-  candidates: require('../candidates-data/2020/americana.json'),
-  candidatesUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2020/61310/2030402020/13/candidatos',
-  candidateDetailsUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2020/61310/2030402020/candidato',
-  outputFile: 'americana-details.json'
+const cities = {
+  americana: {
+    candidates: require('../candidates-data/2020/americana.json'),
+    candidatesUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2020/61310/2030402020/13/candidatos',
+    candidateDetailsUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2020/61310/2030402020/candidato',
+    outputFile: 'americana-details.json'
+  },
+  campinas: {
+    candidates: require('../candidates-data/2020/campinas.json'),
+    candidatesUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2020/62910/2030402020/13/candidatos',
+    candidateDetailsUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2020/62910/2030402020/candidato',
+    outputFile: 'campinas-details.json'
+  },
+  portoAlegre: {
+    candidates: require('../candidates-data/2020/porto-alegre.json'),
+    candidatesUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2020/88013/2030402020/13/candidatos',
+    candidateDetailsUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2020/88013/2030402020/candidato',
+    outputFile: 'porto-alegre-details.json'
+  }
 }
-
-const campinas = {
-  candidates: require('../candidates-data/2020/campinas.json'),
-  candidatesUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2020/62910/2030402020/13/candidatos',
-  candidateDetailsUrl: 'http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2020/62910/2030402020/candidato',
-  outputFile: 'campinas-details.json'
-}
-
 
 const fetchCandidatesDetails = async (city) => {
   const getMissingCandidates = () => {
@@ -56,4 +62,4 @@ const fetchCandidatesDetails = async (city) => {
   }
 };
 
-fetchCandidatesDetails(americana);
+fetchCandidatesDetails(cities.campinas);
